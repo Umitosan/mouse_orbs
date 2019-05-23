@@ -16,8 +16,8 @@ function Game(updateDur) {
 
   this.init = function() {
     this.bg.src = 'bg1.png';
-    this.boxy = new Box(20,20,myColors.red,20,1);
-    this.orbGroup = new Orbs(4,4);
+    this.boxy = new Box(20,20,myColors.green,20,1);
+    this.orbGroup = new Orbs(20,6,6);
     this.orbGroup.init();
     this.lastUpdate = performance.now();
   };
