@@ -29,7 +29,6 @@ var State = {
   loopRunning: false,
   gameStarted: false,
   lastFrameTimeMs: 0, // The last time the loop was run
-  maxFPS: 60, // The maximum FPS allowed
   simSpeed: defaultSimSpeed, // speed of simulation loop
   playTime: 0,
   frameCounter: 0,
@@ -60,7 +59,6 @@ function softReset() {
     loopRunning: false,
     gameStarted: false,
     lastFrameTimeMs: 0, // The last time the loop was run
-    maxFPS: 60, // The maximum FPS allowed
     simSpeed: defaultSimSpeed, // speed of simulation loop
     playTime: 0,
     frameCounter: 0,
@@ -328,10 +326,6 @@ function gameLoop(timestamp) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
-
-  function test() {
-    console.log('test works');
-  }
 
   CANVAS =  $('#canvas')[0];
   ctx =  CANVAS.getContext('2d');

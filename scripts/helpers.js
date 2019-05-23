@@ -19,16 +19,17 @@ function generalLoopReset() {
   State.myReq = requestAnimationFrame(gameLoop);
 }
 
-function TxtBox(x,y,font,color) {
+function TxtBox(x,y,font,color,msg) {
   this.x = x;
   this.y = y;
   this.font = font;
   this.color = color;
+  this.msg = msg;
 
   this.draw = function() {
-    ctx1.font = this.font;
-    ctx1.fillStyle = this.color;
-    ctx1.fillText("Sorted!",this.x,this.y);
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText(this.msg,this.x,this.y);
   };
 }
 

@@ -10,22 +10,23 @@ function Game(updateDur) {
   this.paused = false;
   this.bg = new Image();
   this.boxy = undefined;
+  this.orbGroup = undefined;
   this.pausedTxt = undefined;
   this.mode = 'init';
 
   this.init = function() {
     this.bg.src = 'bg1.png';
     this.boxy = new Box(20,20,myColors.red,20,1);
+    this.orbGroup = new Orbs(4,4);
+    this.orbGroup.init();
     this.lastUpdate = performance.now();
   };
 
   this.pauseIt = function() {
     myGame.paused = true;
-    // this.pausedTxt.show = true;
   };
   this.unpauseIt = function() {
     myGame.paused = false;
-    // this.pausedTxt.show = false;
     // this prevents pac from updating many times after UNpausing
     this.lastUpdate = performance.now();
     this.timeGap = 0;
@@ -37,6 +38,7 @@ function Game(updateDur) {
   };
 
   this.draw = function() {  // draw everything!
+    this.orbGroup.draw();
     this.boxy.draw();
   }; // end draw
 
@@ -52,6 +54,7 @@ function Game(updateDur) {
                 // }
                 // general update area
                 this.boxy.update();
+                this.orbGroup.update();
               }
               this.lastUpdate = performance.now();
             } // end if
