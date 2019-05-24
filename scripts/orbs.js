@@ -25,10 +25,10 @@ function Orbs(nodeDiam, width, height) {
       let yGap = canH / (this.height);
       console.log('xGap,yGap = ' + xGap + " , " + yGap);
       for (let c = 0; c < this.width; c++) {
-        let newX = (c * (xGap/2)) + (xGap/this.width);
+        let newX = (c * (xGap+1)) + ( xGap / 2 );
         for (let r = 0; r < this.height; r++) {
-          let newY = (r * (yGap/2)) + (yGap/this.height);
-          this.nodes.push(new Node(newX,newY,this.nodeDiam/2,randColor("rgba")));
+          let newY = (r * (yGap+1)) + ( yGap / 2 );
+          this.nodes.push(new Node(newX,newY,this.nodeDiam/2,myColors.blue));
         }
       }
       console.log('this.nodes = ', this.nodes);
@@ -61,7 +61,7 @@ function Orbs(nodeDiam, width, height) {
       this.txtMouseCoords.msg = ("rgb(0,200,0)","X,Y: "+ this.mouseX+","+this.mouseY);
     }
     for (let i = 0; i < this.nodes.length; i++) {
-      this.nodes[i].update();
+      this.nodes[i].update(this.mouseX,this.mouseY);
     }
   }; // update
 
@@ -76,25 +76,37 @@ function Node(x,y,r,color) {
   this.y = y;
   this.radius = r;
   this.color = color;
+  this.mouseOver = undefined;
 
   this.init = function() {
-
+    this.mouseOver = false;
   };
 
   this.draw = function() {
     ctx.save();
     ctx.beginPath();
-    ctx.translate(this.x,this.y);
-    ctx.arc(this.x,this.y,this.radius,0,360);
-    ctx.fillStyle = this.color;
-    ctx.strokStyle = this.color;
+    // ctx.translate(this.x,this.y);
+    if (this.mouseOver) {
+      ctx.fillStyle = myColors.cherry;
+      ctx.strokStyle = myColors.green;
+      ctx.arc(this.x,this.y,this.radius+4,0,360);
+    } else {
+      ctx.fillStyle = this.color;
+      ctx.strokStyle = this.color;
+      ctx.arc(this.x,this.y,this.radius,0,360);
+    }
     ctx.fill();
     ctx.stroke();
     ctx.restore();
   };
 
-  this.update = function() {
-
+  this.update = function(mX,mY) {
+    if ( (mX > (this.x-this.radius)) && (mX < (this.x+this.radius)) &&
+         (mY > (this.y-this.radius)) && (mY < (this.y+this.radius)) )  {
+      this.mouseOver = true;
+    } else {
+      this.mouseOver = false;
+    }
   };
 
 }
