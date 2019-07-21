@@ -82,6 +82,9 @@ function Node(x,y,r,color) {
   this.pulseBallRad = 8;
   this.pulseSpinSpeed = getRadianAngle(2);
   this.pulseSpinAngle = 0;
+  this.rays = undefined;
+  this.rayLen = 20;
+  this.totalRays = 20;
 
   this.init = function() {
     this.mouseOver = false;
@@ -107,16 +110,57 @@ function Node(x,y,r,color) {
     ctx.restore();
   };
 
+  this.initRays = function() {
+    this.rays = [];
+    let gap = getRadianAngle(360 / this.totalRays);
+    // let gap = getRadianAngle(3);
+    for (let i = 0; i < this.totalRays; i++) {
+      this.rays.push( {
+          "x1": this.rayLen,
+          "y1": 0,
+          "x2": 0,
+          "y2": 0,
+          "radOffset": (i * gap) // radien spacer between rays
+        }
+      );
+    }
+  };
+
+  this.drawRays = function() {
+    ctx.save();
+    ctx.translate(this.x,this.y);
+    ctx.strokeStyle = this.color;
+    // ctx.strkeStyle = invertRGBAstr(this.color);
+    for (let r = 0; r < this.rays.length; r++) {
+      ctx.rotate( this.rays[r].radOffset );
+      ctx.beginPath();
+      ctx.lineWidth = 4;
+      ctx.moveTo(this.rays[r].x1, this.rays[r].y1);
+      ctx.lineTo(this.rays[r].x2, this.rays[r].y2);
+      ctx.stroke();
+      ctx.rotate( -(getRadianAngle(360/this.totalRays) * r) );
+    }
+    ctx.restore();
+  };
+
+  this.updateRays = function() {
+    for (let i = 0; i < this.rays.length; i++) {
+       this.rays[i].x1 += 1;
+       this.rays[i].x2 += 1;
+    }
+  };
+
   this.draw = function() {
     // context.arc(x,y,r,sAngle,eAngle,counterclockwise)  angles in radiens
     if (this.mouseOver) {
       ctx.beginPath();
       ctx.fillStyle = invertRGBAstr(this.color);
-      ctx.strokStyle = invertRGBAstr(this.color);
+      ctx.strokeStyle = invertRGBAstr(this.color);
       ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
       ctx.fill();
       ctx.stroke();
-      this.drawPulse();
+      // this.drawPulse();
+      this.drawRays();
     } else {
       ctx.beginPath();
       ctx.fillStyle = this.color;
@@ -131,9 +175,15 @@ function Node(x,y,r,color) {
     if ( (mX > (this.x-this.radius)) && (mX < (this.x+this.radius)) &&
          (mY > (this.y-this.radius)) && (mY < (this.y+this.radius)) )  {
       this.mouseOver = true;
+      if (this.rays !== undefined) {
+        this.updateRays();
+      } else {
+        this.initRays();
+      }
       this.pulseSpinAngle += this.pulseSpinSpeed;
     } else {
       this.mouseOver = false;
+      this.rays = undefined;
     }
   };
 
